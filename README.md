@@ -3,6 +3,7 @@ forked from ohmcodes/WindowsGSM.Soulmask.
 
 BUT use the RIGHT WAY to stop game server.
 The original version of ohmcodes with control-c would cause your game save lost.
+Sadly, ohmcodes just closed my issue report. Hence, I had to fix it by myself.
 ```
 
 # WindowsGSM.Soulmask
