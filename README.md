@@ -23,7 +23,6 @@ Sadly, ohmcodes just closed my issue report. Hence, I had to fix it by myself.
 
 ### Additional notice
 1. The game server relies on local telnet to save and quit game server gracefully.
-2. this plugin will depend on a small and old telnet tool called "TST10".
 
 ### Unofficial Documentation
 🗃️ https://soulmask.fandom.com/wiki/Private_Server
