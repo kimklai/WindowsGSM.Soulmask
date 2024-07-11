@@ -132,12 +132,12 @@ namespace WindowsGSM.Plugins
             int shutDownTimer = 10; // seconds
             await Task.Run(() =>
             {
-                SendQuitCMD(shutDownTimer);
+                SendQuitCMD(shutDownTimer, p.StartInfo.Arguments);
             });
             await Task.Delay(shutDownTimer * 1000 + 5000);
         }
 
-        private void SendQuitCMD(int timeToWait)
+        private void SendQuitCMD(int timeToWait, string procArgs)
         {
             string server = "127.0.0.1";
             int port = 18888;
@@ -149,14 +149,17 @@ namespace WindowsGSM.Plugins
             // dynamically fetch echo port from server parameter
             string pattern = @"-EchoPort=(\d+)";
 
-            Match match = Regex.Match(_serverData.ServerParam, pattern);
-            if (match.Success)
-            {
-                int.TryParse(match.Groups[1].Value, out port);
-            }
-
             try
             {
+                Match match = Regex.Match(procArgs, pattern);
+                if (match.Success)
+                {
+                    if (int.TryParse(match.Groups[1].Value, out int echoPort))
+                    {
+                        port = echoPort;
+                    }
+                }
+
                 using (TcpClient client = new TcpClient(server, port))
                 using (NetworkStream stream = client.GetStream())
                 using (StreamReader reader = new StreamReader(stream, Encoding.ASCII))
@@ -166,18 +169,18 @@ namespace WindowsGSM.Plugins
                     string? response = reader.ReadLine();
                     if (response != null)
                     {
-                        Console.WriteLine("{0}", response);
-                        Console.WriteLine("{0}", reader.ReadLine());
+                        // Console.WriteLine("{0}", response);
+                        // Console.WriteLine("{0}", reader.ReadLine());
 
                         // check first "hello"
                         if (response.Trim() == expectedResponse)
                         {
                             // send command to quit
                             writer.WriteLine(command);
-                            Console.WriteLine("send: {0}", command);
-                            Console.WriteLine("{0}", reader.ReadLine());
-                            Console.WriteLine("{0}", reader.ReadLine());
-                            Console.WriteLine("{0}", reader.ReadLine());
+                            // Console.WriteLine("send: {0}", command);
+                            // Console.WriteLine("{0}", reader.ReadLine());
+                            // Console.WriteLine("{0}", reader.ReadLine());
+                            // Console.WriteLine("{0}", reader.ReadLine());
                         }
                         else
                         {
