@@ -130,9 +130,13 @@ namespace WindowsGSM.Plugins
             await Task.Run(() =>
             {
                 Functions.ServerConsole.SetMainWindow(p.MainWindowHandle);
-                Functions.ServerConsole.SendWaitToMainWindow("quit 5");
-                Task.Delay(5000);
-                Functions.ServerConsole.SendWaitToMainWindow("^c");
+                // FIXME
+                // the game doesn't support console input, thus 'quit 5' is not working at all
+                // then use control-c to shutdown game would cause data lost.
+                // comment out those trash code for better fix
+                // Functions.ServerConsole.SendWaitToMainWindow("quit 5");
+                // Task.Delay(5000);
+                // Functions.ServerConsole.SendWaitToMainWindow("^c");
             });
             await Task.Delay(2000);
         }
