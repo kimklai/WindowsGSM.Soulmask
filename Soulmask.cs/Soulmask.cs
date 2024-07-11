@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Diagnostics;
 using System.Text;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using WindowsGSM.Functions;
 using WindowsGSM.GameServer.Engine;
@@ -17,10 +18,10 @@ namespace WindowsGSM.Plugins
         public Plugin Plugin = new Plugin
         {
             name = "WindowsGSM.Soulmask", // WindowsGSM.XXXX
-            author = "ohmcodes",
+            author = "kimklai",
             description = "WindowsGSM plugin for supporting Soulmask Dedicated Server",
-            version = "1.0",
-            url = "https://github.com/ohmcodes/WindowsGSM.Soulmask", // Github repository link (Best practice)
+            version = "1.1",
+            url = "https://github.com/kimklai/WindowsGSM.Soulmask", // Github repository link (Best practice)
             color = "#1E8449" // Color Hex
         };
 
@@ -127,18 +128,61 @@ namespace WindowsGSM.Plugins
         // - Stop server function
         public async Task Stop(Process p)
         {
+            int shutDownTimer = 10; // seconds
             await Task.Run(() =>
             {
-                Functions.ServerConsole.SetMainWindow(p.MainWindowHandle);
-                // FIXME
-                // the game doesn't support console input, thus 'quit 5' is not working at all
-                // then use control-c to shutdown game would cause data lost.
-                // comment out those trash code for better fix
-                // Functions.ServerConsole.SendWaitToMainWindow("quit 5");
-                // Task.Delay(5000);
-                // Functions.ServerConsole.SendWaitToMainWindow("^c");
+                SendQuitCMD(shutDownTimer);
             });
-            await Task.Delay(2000);
+            await Task.Delay(shutDownTimer * 1000 + 5000);
+        }
+
+        private void SendQuitCMD(int timeToWait)
+        {
+            string server = "127.0.0.1";
+            int port = 18888;
+            string command = "quit " + timeToWait;
+            string expectedResponse = "Hello:";
+
+            Console.WriteLine("== [Stop Server]: try to connect local port ==");
+
+            try
+            {
+                using (TcpClient client = new TcpClient(server, port))
+                using (NetworkStream stream = client.GetStream())
+                using (StreamReader reader = new StreamReader(stream, Encoding.ASCII))
+                using (StreamWriter writer = new StreamWriter(stream, Encoding.ASCII) { AutoFlush = true })
+                {
+                    // read response
+                    string? response = reader.ReadLine();
+                    if (response != null)
+                    {
+                        Console.WriteLine("{0}", response);
+                        Console.WriteLine("{0}", reader.ReadLine());
+
+                        // check first "hello"
+                        if (response.Trim() == expectedResponse)
+                        {
+                            // send command to quit
+                            writer.WriteLine(command);
+                            Console.WriteLine("send: {0}", command);
+                            Console.WriteLine("{0}", reader.ReadLine());
+                            Console.WriteLine("{0}", reader.ReadLine());
+                            Console.WriteLine("{0}", reader.ReadLine());
+                        }
+                        else
+                        {
+                            Console.WriteLine("not expected: {0}", expectedResponse);
+                        }
+                    }
+
+                    stream.Close();
+                    client.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("error while stopping server: {0}", e.Message);
+            }
         }
 
         // - Update server function
