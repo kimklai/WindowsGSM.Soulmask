@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -144,6 +145,15 @@ namespace WindowsGSM.Plugins
             string expectedResponse = "Hello:";
 
             Console.WriteLine("== [Stop Server]: try to connect local port ==");
+
+            // dynamically fetch echo port from server parameter
+            string pattern = @"-EchoPort=(\d+)";
+
+            Match match = Regex.Match(_serverData.ServerParam, pattern);
+            if (match.Success)
+            {
+                int.TryParse(match.Groups[1].Value, out port);
+            }
 
             try
             {
