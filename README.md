@@ -1,3 +1,10 @@
+```
+forked from ohmcodes/WindowsGSM.Soulmask.
+
+BUT use the RIGHT WAY to stop game server.
+The original code with control-c would cause your game save lost.
+```
+
 # WindowsGSM.Soulmask
 🧩WindowsGSM plugin that provides Soulmask Dedicated server
 
