@@ -2,7 +2,7 @@
 forked from ohmcodes/WindowsGSM.Soulmask.
 
 BUT use the RIGHT WAY to stop game server.
-The original code with control-c would cause your game save lost.
+The original version of ohmcodes with control-c would cause your game save lost.
 ```
 
 # WindowsGSM.Soulmask
@@ -22,25 +22,9 @@ PLEASE ⭐STAR⭐ THE REPO IF YOU LIKE IT! THANKS!
 4. Click **[RELOAD PLUGINS]** button or restart WindowsGSM
 5. Navigate "Servers" and Click "Install Game Server" and find "Soulmask Dedicated Server [Soulmask.cs]
 
-### INSTALL
-1. Better if you have Steam Launcher to your server
-2. Install all in _CommonRedist
-3. DirectX and vcredist
-4. Windows servers only 
-(downloading .net frame 3.5 from the inter web will not work you must use admin control panel)
-https://www.youtube.com/watch?v=uSRMvCjuUdI
-5. Copy list of file below on `WS\Binaries\Win64` from root directory and start the server
-```
-steamclient.dll
-steamclient64.dll
-tier0_s.dll
-tier0_s64.dll
-vstdlib_s.dll
-vstdlib.s64.dll
-```
-
-### Official Documentation
-🗃️ TBD
+### Additional notice
+1. The game server relies on local telnet to save and quit game server gracefully.
+2. this plugin will depend on a small and old telnet tool called "TST10".
 
 ### Unofficial Documentation
 🗃️ https://soulmask.fandom.com/wiki/Private_Server
@@ -51,13 +35,6 @@ vstdlib.s64.dll
 ### Dedicated server info
 🖥️ https://steamdb.info/app/2886870/info/
 
-
-### Give Love!
-[Buy me a coffee](https://www.buymeacoffee.com/ohmcodes)
-
-[Paypal](https://www.paypal.com/donate/?business=8389QZ23QRDPE&no_recurring=0&item_name=Game+Server%2FTools+Community+Donations&currency_code=CAD)
-
 # License
 This project is licensed under the MIT License - see the <a href="https://github.com/ohmcodes/WindowsGSM.Soulmask/blob/main/LICENSE">LICENSE.md</a> file for details
 
-.
