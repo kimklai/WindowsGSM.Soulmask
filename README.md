@@ -9,8 +9,6 @@ Sadly, ohmcodes just closed my issue report. Hence, I had to fix it by myself.
 # WindowsGSM.Soulmask
 🧩WindowsGSM plugin that provides Soulmask Dedicated server
 
-PLEASE ⭐STAR⭐ THE REPO IF YOU LIKE IT! THANKS!
-
 # WindowsGSM Installation: 
 1. Download  WindowsGSM https://windowsgsm.com/ 
 2. Create a Folder at a Location you wan't all Server to be Installed and Run.
