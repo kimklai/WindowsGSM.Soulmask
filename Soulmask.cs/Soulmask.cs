@@ -129,37 +129,49 @@ namespace WindowsGSM.Plugins
         // - Stop server function
         public async Task Stop(Process p)
         {
-            int shutDownTimer = 10; // seconds
+            int shutDownTimer = 60; // seconds
+            int port = 18888;
+
             await Task.Run(() =>
             {
-                SendQuitCMD(shutDownTimer, p.StartInfo.Arguments);
+                try
+                {
+                    // dynamically fetch
+                    // - echo port
+                    // - count down timer
+                    // from server parameter
+                    string pattern1 = @"-EchoPort=(\d+)";
+                    string pattern2 = @"-CountDown=(\d+)";
+                    Match match = Regex.Match(p.StartInfo.Arguments, pattern1);
+                    if (match.Success && int.TryParse(match.Groups[1].Value, out int echoPort))
+                    {
+                        port = echoPort;
+                    }
+                    match = Regex.Match(p.StartInfo.Arguments, pattern2);
+                    if (match.Success && int.TryParse(match.Groups[1].Value, out int timer))
+                    {
+                        shutDownTimer = timer;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("error while parsing arguments: {0}", e.Message);
+                }
+                SendQuitCMD(shutDownTimer, port);
             });
             await Task.Delay(shutDownTimer * 1000 + 5000);
         }
 
-        private void SendQuitCMD(int timeToWait, string procArgs)
+        private void SendQuitCMD(int timeToWait, int port)
         {
             string server = "127.0.0.1";
-            int port = 18888;
             string command = "quit " + timeToWait;
             string expectedResponse = "Hello:";
 
             Console.WriteLine("== [Stop Server]: try to connect local port ==");
 
-            // dynamically fetch echo port from server parameter
-            string pattern = @"-EchoPort=(\d+)";
-
             try
             {
-                Match match = Regex.Match(procArgs, pattern);
-                if (match.Success)
-                {
-                    if (int.TryParse(match.Groups[1].Value, out int echoPort))
-                    {
-                        port = echoPort;
-                    }
-                }
-
                 using (TcpClient client = new TcpClient(server, port))
                 using (NetworkStream stream = client.GetStream())
                 using (StreamReader reader = new StreamReader(stream, Encoding.ASCII))
