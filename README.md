@@ -6,7 +6,7 @@ WindowsGSM plugin of Soulmask Dedicated server
 - Support customized count down timer.
 
 # Installation:
-1. Download [latest](https://github.com/ohmcodes/WindowsGSM.Soulmask/releases/latest) release
+1. Download [latest](https://github.com/kimklai/WindowsGSM.Soulmask/releases/latest) release
 2. Extract then Move **Soulmask.cs** folder to **plugins** folder
 3. OR Press on the Puzzle Icon in the left bottom side and install this plugin by navigating to it and select the Zip File.
 4. Click **[RELOAD PLUGINS]** button or restart WindowsGSM
