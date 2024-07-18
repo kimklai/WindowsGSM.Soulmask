@@ -21,9 +21,9 @@ namespace WindowsGSM.Plugins
             name = "WindowsGSM.Soulmask", // WindowsGSM.XXXX
             author = "kimklai",
             description = "WindowsGSM plugin for supporting Soulmask Dedicated Server",
-            version = "1.1",
+            version = "1.3.1",
             url = "https://github.com/kimklai/WindowsGSM.Soulmask", // Github repository link (Best practice)
-            color = "#1E8449" // Color Hex
+            color = "#800080" // Color Hex
         };
 
         // - Standard Constructor and properties
@@ -165,8 +165,7 @@ namespace WindowsGSM.Plugins
         private void SendQuitCMD(int timeToWait, int port)
         {
             string server = "127.0.0.1";
-            string command = "quit " + timeToWait;
-            string expectedResponse = "Hello:";
+            string command = "close " + timeToWait;
 
             Console.WriteLine("== [Stop Server]: try to connect local port ==");
 
@@ -177,28 +176,13 @@ namespace WindowsGSM.Plugins
                 using (StreamReader reader = new StreamReader(stream, Encoding.ASCII))
                 using (StreamWriter writer = new StreamWriter(stream, Encoding.ASCII) { AutoFlush = true })
                 {
-                    // read response
-                    string? response = reader.ReadLine();
-                    if (response != null)
-                    {
-                        // Console.WriteLine("{0}", response);
-                        // Console.WriteLine("{0}", reader.ReadLine());
-
-                        // check first "hello"
-                        if (response.Trim() == expectedResponse)
-                        {
-                            // send command to quit
-                            writer.WriteLine(command);
-                            // Console.WriteLine("send: {0}", command);
-                            // Console.WriteLine("{0}", reader.ReadLine());
-                            // Console.WriteLine("{0}", reader.ReadLine());
-                            // Console.WriteLine("{0}", reader.ReadLine());
-                        }
-                        else
-                        {
-                            Console.WriteLine("not expected: {0}", expectedResponse);
-                        }
-                    }
+                    // send command to quit
+                    Task.Delay(500); // wait a little bit for connection response
+                    writer.WriteLine(command);
+                    // Console.WriteLine("send: {0}", command);
+                    // Console.WriteLine("{0}", reader.ReadLine());
+                    // Console.WriteLine("{0}", reader.ReadLine());
+                    // Console.WriteLine("{0}", reader.ReadLine());
 
                     stream.Close();
                     client.Close();
